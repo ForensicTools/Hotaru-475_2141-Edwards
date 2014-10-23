@@ -7,7 +7,6 @@ using namespace System::Windows::Forms;
 void Main(array<String^>^ args){
 	Application::EnableVisualStyles();
 	Application::SetCompatibleTextRenderingDefault(false);
-
 	Hotaru::MainForm form;
 	Application::Run(%form);
 }
