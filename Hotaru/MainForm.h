@@ -74,8 +74,8 @@ namespace Hotaru {
 				this->exitMenu = (gcnew System::Windows::Forms::ToolStripMenuItem());
 				this->openFileDialog = (gcnew System::Windows::Forms::OpenFileDialog());
 				this->splitContainer = (gcnew System::Windows::Forms::SplitContainer());
-				this->imageList = (gcnew System::Windows::Forms::ImageList(this->components));
 				this->treeView = (gcnew System::Windows::Forms::TreeView());
+				this->imageList = (gcnew System::Windows::Forms::ImageList(this->components));
 				this->menuStrip->SuspendLayout();
 				(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->splitContainer))->BeginInit();
 				this->splitContainer->Panel1->SuspendLayout();
@@ -106,14 +106,14 @@ namespace Hotaru {
 				// addImageMenu
 				// 
 				this->addImageMenu->Name = L"addImageMenu";
-				this->addImageMenu->Size = System::Drawing::Size(141, 22);
+				this->addImageMenu->Size = System::Drawing::Size(152, 22);
 				this->addImageMenu->Text = L"Add Image...";
 				this->addImageMenu->Click += gcnew System::EventHandler(this, &MainForm::addImageMenu_Click);
 				// 
 				// exitMenu
 				// 
 				this->exitMenu->Name = L"exitMenu";
-				this->exitMenu->Size = System::Drawing::Size(141, 22);
+				this->exitMenu->Size = System::Drawing::Size(152, 22);
 				this->exitMenu->Text = L"Exit";
 				this->exitMenu->Click += gcnew System::EventHandler(this, &MainForm::exitMenu_Click);
 				// 
@@ -134,13 +134,6 @@ namespace Hotaru {
 				this->splitContainer->SplitterDistance = 283;
 				this->splitContainer->TabIndex = 1;
 				// 
-				// imageList
-				// 
-				this->imageList->ImageStream = (cli::safe_cast<System::Windows::Forms::ImageListStreamer^>(resources->GetObject(L"imageList.ImageStream")));
-				this->imageList->TransparentColor = System::Drawing::Color::Transparent;
-				this->imageList->Images->SetKeyName(0, L"Folder-icon.png");
-				this->imageList->Images->SetKeyName(1, L"fileIcon.gif");
-				// 
 				// treeView
 				// 
 				this->treeView->Dock = System::Windows::Forms::DockStyle::Fill;
@@ -151,6 +144,12 @@ namespace Hotaru {
 				this->treeView->SelectedImageIndex = 0;
 				this->treeView->Size = System::Drawing::Size(283, 468);
 				this->treeView->TabIndex = 0;
+				// 
+				// imageList
+				// 
+				this->imageList->ImageStream = (cli::safe_cast<System::Windows::Forms::ImageListStreamer^>(resources->GetObject(L"imageList.ImageStream")));
+				this->imageList->TransparentColor = System::Drawing::Color::Transparent;
+				this->imageList->Images->SetKeyName(0, L"Folder-icon.png");
 				// 
 				// MainForm
 				// 
@@ -176,7 +175,7 @@ namespace Hotaru {
 	#pragma endregion
 		private: System::Void addImageMenu_Click(System::Object^  sender, System::EventArgs^  e) {
 					OpenFileDialog ^ openImage = gcnew OpenFileDialog();
-					openImage->Filter = "Image Files|*.dd|All Files|*.*";
+					openImage->Filter = "Image Files|*.dd, *.img, *.raw|All Files|*.*";
 					openImage->ShowDialog();	
 		}
 
