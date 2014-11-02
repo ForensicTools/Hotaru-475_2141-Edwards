@@ -9,7 +9,6 @@ namespace Hotaru {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
-	using namespace std;
 
 	/// <summary>
 	/// Summary for MainForm
@@ -69,7 +68,6 @@ namespace Hotaru {
 			void InitializeComponent(void)
 			{
 				this->components = (gcnew System::ComponentModel::Container());
-				System::Windows::Forms::TreeNode^  treeNode1 = (gcnew System::Windows::Forms::TreeNode(L"Root"));
 				System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(MainForm::typeid));
 				this->menuStrip = (gcnew System::Windows::Forms::MenuStrip());
 				this->fileMenu = (gcnew System::Windows::Forms::ToolStripMenuItem());
@@ -144,10 +142,6 @@ namespace Hotaru {
 				this->treeView->ImageList = this->imageList;
 				this->treeView->Location = System::Drawing::Point(0, 0);
 				this->treeView->Name = L"treeView";
-				treeNode1->ImageIndex = 0;
-				treeNode1->Name = L"Node0";
-				treeNode1->Text = L"Root";
-				this->treeView->Nodes->AddRange(gcnew cli::array< System::Windows::Forms::TreeNode^  >(1) { treeNode1 });
 				this->treeView->SelectedImageIndex = 0;
 				this->treeView->Size = System::Drawing::Size(283, 468);
 				this->treeView->TabIndex = 0;
@@ -183,30 +177,37 @@ namespace Hotaru {
 
 		#pragma endregion
 		private: System::Void addImageMenu_Click(System::Object^  sender, System::EventArgs^  e) {
-					OpenFileDialog ^ openImage = gcnew OpenFileDialog();
-					openImage->Filter = "Image Files|*.dd, *.img, *.raw|All Files|*.*";
-					openImage->ShowDialog();	
+				OpenFileDialog ^ openImage = gcnew OpenFileDialog();
+				openImage->Filter = "Image Files|*.dd, *.img, *.raw|All Files|*.*";
+				openImage->ShowDialog();	
 		}
 
 		private: System::Void exitMenu_Click(System::Object^  sender, System::EventArgs^  e) {
-					Application::Exit();
+				Application::Exit();
 		}
 		private: System::Void MainForm_Load(System::Object^  sender, System::EventArgs^  e) {
-				 DirectoryInfo ^ directoryInfo = gcnew DirectoryInfo("\\");
-				 if (Directory::Exists("\\")){
-					 try{
-						 array<DirectoryInfo^>^ directories = directoryInfo->GetDirectories();
-						 if (directories->Length > 0){
-							 for each (DirectoryInfo^ d in directories)
-							 {
-								 TreeNode ^ node = treeView->Nodes[0]->Nodes->Add(d->Name);
-							 }
-						 }
-					 }
-					 catch (Exception ^ ex){
-						 MessageBox::Show(ex->Message);
-					 }
-				 }
+				for each (DriveInfo^ drive in DriveInfo::GetDrives())
+				{
+					TreeNode ^ newNode = gcnew TreeNode(drive->Name);
+					treeView->Nodes->Add(newNode);
+					treeView->SelectedNode = newNode;
+					DirectoryInfo ^ directoryInfo = gcnew DirectoryInfo(drive->Name);
+
+					if (Directory::Exists(drive->Name)){
+						try{
+							array<DirectoryInfo^>^ directories = directoryInfo->GetDirectories();
+							if (directories->Length > 0){
+								for each (DirectoryInfo^ d in directories)
+								{
+									TreeNode ^ node = treeView->SelectedNode->Nodes->Add(d->Name);
+								}
+							}
+						}
+						catch (Exception ^ ex){
+							MessageBox::Show(ex->Message);
+						}
+					}
+				}
 		}
 };
 }
