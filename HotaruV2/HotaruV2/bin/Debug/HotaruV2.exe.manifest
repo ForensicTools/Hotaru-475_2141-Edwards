@@ -54,14 +54,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="HotaruV2.exe" size="16384">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="HotaruV2.exe" size="16896">
       <assemblyIdentity name="HotaruV2" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>G8X4eWeaXMjefeyEB401e1Vrfski53c0NT8PJO2o8YQ=</dsig:DigestValue>
+        <dsig:DigestValue>zin20kx1rQgW6hCprtdjbEbB+SWxH7o1Oel4mNmpZK0=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
