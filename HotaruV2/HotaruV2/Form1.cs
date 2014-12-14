@@ -9,12 +9,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace HotaruV2
 {
     public partial class Form1 : Form
     {
         private ListViewColumnSorter lvwColumnSorter;
+        private string view;
 
         public Form1()
         {
@@ -28,20 +30,27 @@ namespace HotaruV2
 
         private void PopulateTreeView()
         {
-            foreach (DriveInfo drive in DriveInfo.GetDrives())
+            try
             {
-                TreeNode rootNode = new TreeNode(drive.Name);
-                rootNode.ImageIndex = rootNode.SelectedImageIndex = 0;
-                rootNode.Tag = drive.Name;
-                treeView.Nodes.Add(rootNode);
-                rootNode.Nodes.Add("");
+                foreach (DriveInfo drive in DriveInfo.GetDrives())
+                {
+                    TreeNode rootNode = new TreeNode(drive.Name);
+                    rootNode.ImageIndex = rootNode.SelectedImageIndex = 0;
+                    rootNode.Tag = drive.Name;
+                    treeView.Nodes.Add(rootNode);
+                    rootNode.Nodes.Add("");
+                }
+            }
+            catch (System.Exception e)
+            {
+                MessageBox.Show(e.Message);
             }
         }
 
         private static void ShowAllFoldersUnder(string path, TreeNode parent, int i)
         {
             int count = i;
-            if (count < 3)
+            if (count < 2)
             {
                 count++;
                 try
@@ -69,10 +78,13 @@ namespace HotaruV2
             ShowAllFoldersUnder(e.Node.Tag.ToString(), e.Node, 0);
         }
 
-        //Clears the current list of files and displays all file information in the selected folder
+
         private void treeView_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            //Clears the current list of files and displays all file information in the selected folder
             listView.Items.Clear();
+            chart.Series["Files"].Points.Clear();
+            Dictionary<string, int> fileDictionary = new Dictionary<string, int>();
             try
             {
                 foreach (String file in Directory.GetFiles(e.Node.Tag.ToString()))
@@ -80,12 +92,67 @@ namespace HotaruV2
                     ListViewItem lvi = new ListViewItem(Path.GetFileNameWithoutExtension(file));
                     lvi.SubItems.Add(Path.GetExtension(file));
                     lvi.SubItems.Add(file);
+                    //Add each different filetype with counts to the dictionary to use for graphing
+                    if (fileDictionary.ContainsKey(Path.GetExtension(file).ToLower()))
+                    {
+                        fileDictionary[Path.GetExtension(file).ToLower()]++;
+                    }
+                    else
+                    {
+                        fileDictionary.Add(Path.GetExtension(file).ToLower(), 1);
+                    }
                     listView.Items.Add(lvi);
                 }
             }
             catch (UnauthorizedAccessException) { }
+
+            switch (view)
+            {
+                case "Bar":
+                    loadBarGraph(fileDictionary);
+                    break;
+                case "Pie":
+                    loadPieGraph(fileDictionary);
+                    break;
+                default:
+                    loadBarGraph(fileDictionary);
+                    break;
+            }
         }
 
+        private void loadBarGraph(Dictionary<string, int> dictionary)
+        {
+            chart.Series["Files"].Points.Clear();
+            chart.Series["Files"].ChartType = SeriesChartType.Column;
+            // Add each file type w/ count to the graph
+            for (int i = 0; i < dictionary.Count; i++)
+            {
+                string key = dictionary.OrderByDescending(k => k.Value).ElementAt(i).Key;
+                int value = dictionary.OrderByDescending(k => k.Value).ElementAt(i).Value;
+
+                chart.Series["Files"].Points.AddXY(key, value);
+                if (value >= 1 && value <= 5)
+                {
+                    chart.Series["Files"].Points[i].Color = Color.Blue;
+                }
+                else if (value >= 6 && value <= 15)
+                {
+                    chart.Series["Files"].Points[i].Color = Color.Green;
+                }
+                else
+                {
+                    chart.Series["Files"].Points[i].Color = Color.Red;
+                }
+            }
+        }
+
+        private void loadPieGraph(Dictionary<string, int> dictionary)
+        {
+            chart.Series["Files"].Points.Clear();
+            chart.Series["Files"].ChartType = SeriesChartType.Pie;
+        }
+
+        // Code for this funtion obtained from msdn.microsoft.com
         private void listView_ColumnClick(object sender, ColumnClickEventArgs e)
         {
             // Determine if clicked column is already the column that is being sorted.
@@ -119,6 +186,64 @@ namespace HotaruV2
 
                 Process.Start(listView.SelectedItems[0].SubItems[2].Text);                
             }
+        }
+
+        private void chart_MouseClick(object sender, MouseEventArgs e)
+        {
+            treeView_AfterSelect(sender, new TreeViewEventArgs(treeView.SelectedNode));
+            HitTestResult result = chart.HitTest(e.X, e.Y);
+            if (result.ChartElementType == ChartElementType.DataPoint)
+            {
+                foreach (ListViewItem lvi in listView.Items)
+                {
+                    if (lvi.SubItems[1].Text.ToLower() != result.Series.Points[result.PointIndex].AxisLabel)
+                    {
+                        lvi.Remove();
+                    }
+                }
+            }
+        }
+
+        private void chart_MouseMove(object sender, MouseEventArgs e)
+        {
+            HitTestResult result = chart.HitTest(e.X, e.Y);
+
+            foreach (DataPoint point in chart.Series["Files"].Points)
+            {
+                point.BorderDashStyle = ChartDashStyle.NotSet;
+            }
+
+            if (result.ChartElementType == ChartElementType.DataPoint)
+            {
+                DataPoint point = chart.Series["Files"].Points[result.PointIndex];
+
+                point.BorderColor = Color.Black;
+                point.BorderDashStyle = ChartDashStyle.Solid;
+                point.BorderWidth = 4;
+            }
+        }
+
+        private void openImageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.ShowDialog();
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void barToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            view = "Bar";
+            treeView_AfterSelect(sender, new TreeViewEventArgs(treeView.SelectedNode));
+        }
+
+        private void pieToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            view = "Pie";
+            treeView_AfterSelect(sender, new TreeViewEventArgs(treeView.SelectedNode));
         }
     }
 }
