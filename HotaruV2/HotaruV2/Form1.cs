@@ -122,8 +122,9 @@ namespace HotaruV2
 
         private void loadBarGraph(Dictionary<string, int> dictionary)
         {
-            chart.Series["Files"].Points.Clear();
+            //chart.Series["Files"].Points.Clear();
             chart.Series["Files"].ChartType = SeriesChartType.Column;
+            chart.Series["Files"].IsVisibleInLegend = false;
             // Add each file type w/ count to the graph
             for (int i = 0; i < dictionary.Count; i++)
             {
@@ -148,8 +149,21 @@ namespace HotaruV2
 
         private void loadPieGraph(Dictionary<string, int> dictionary)
         {
-            chart.Series["Files"].Points.Clear();
+            //chart.Series["Files"].Points.Clear();
             chart.Series["Files"].ChartType = SeriesChartType.Pie;
+            chart.Series["Files"].Palette = ChartColorPalette.BrightPastel;
+            chart.Series["Files"].IsVisibleInLegend = true;
+
+            chart.Series["Files"].XValueType = ChartValueType.String;
+
+            for (int i = 0; i < dictionary.Count; i++)
+            {
+                string key = dictionary.OrderByDescending(k => k.Value).ElementAt(i).Key;
+                int value = dictionary.OrderByDescending(k => k.Value).ElementAt(i).Value;
+
+                chart.Series["Files"].Points.AddXY(key, value);
+            }
+
         }
 
         // Code for this funtion obtained from msdn.microsoft.com

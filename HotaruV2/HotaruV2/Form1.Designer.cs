@@ -140,11 +140,13 @@
             this.chart.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Bright;
             series1.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet;
             series1.ChartArea = "ChartArea1";
-            series1.CustomProperties = "DrawingStyle=Cylinder, EmptyPointValue=Zero";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
+            series1.CustomProperties = "DrawingStyle=Cylinder, EmptyPointValue=Zero, PieLabelStyle=Disabled";
+            series1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
             series1.IsValueShownAsLabel = true;
-            series1.IsVisibleInLegend = false;
             series1.Legend = "Legend1";
             series1.Name = "Files";
+            series1.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.BrightPastel;
             series1.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.String;
             this.chart.Series.Add(series1);
             this.chart.Size = new System.Drawing.Size(550, 330);
