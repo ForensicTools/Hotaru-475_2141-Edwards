@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotaruV2", "HotaruV2\HotaruV2.csproj", "{A7CE706E-EFF7-4901-A18D-9C3693FD9D0B}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Hotaru_Setup", "Hotaru_Setup\Hotaru_Setup.vdproj", "{BFC43871-FE9A-4B9B-96BF-191DB37FB7E7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A7CE706E-EFF7-4901-A18D-9C3693FD9D0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7CE706E-EFF7-4901-A18D-9C3693FD9D0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7CE706E-EFF7-4901-A18D-9C3693FD9D0B}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{A7CE706E-EFF7-4901-A18D-9C3693FD9D0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7CE706E-EFF7-4901-A18D-9C3693FD9D0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFC43871-FE9A-4B9B-96BF-191DB37FB7E7}.Debug|Any CPU.ActiveCfg = Debug
+		{BFC43871-FE9A-4B9B-96BF-191DB37FB7E7}.Release|Any CPU.ActiveCfg = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
